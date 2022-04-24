@@ -3,7 +3,7 @@
 基本同原开源项目
 ### Transformer-based Speech Recognition Model
 
-<img src="img/pytorch-logo-dark.png" width="10%"> [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+<img src="img/pytorch-logo-dark.png" width="10%"> [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 If you use any source codes included in this toolkit in your work, please cite the following paper.
 - Winata, G. I., Madotto, A., Wu, C. S., & Fung, P. (2019). Code-Switched Language Models Using Neural Based Synthetic Data from Parallel Sentences. In Proceedings of the 23rd Conference on Computational Natural Language Learning (CoNLL) (pp. 271-280).
@@ -47,11 +47,7 @@ AiShell-1
 结构如下 ：
 
 Aishell_dataset/
-<<<<<<< HEAD
 ```
-=======
-
->>>>>>> 32c3addddaa4008f84849cb3da4e8acbccb2010f
 ├── transcript
 │   ├── train
 │   │   ├── S0724
@@ -68,11 +64,8 @@ Aishell_dataset/
 │   │   │   ├── BAC009S0725W0124.docx
 │   │   │   ├── BAC009S0725W0124.wav
 .........
-<<<<<<< HEAD
 
 ```
-=======
->>>>>>> 32c3addddaa4008f84849cb3da4e8acbccb2010f
 docx为每个wav文件对应的标签文件
 然后运行数据预处理脚本，生成相应清洗和加语言标签的标签文件夹
        transcript_clean
@@ -83,11 +76,7 @@ docx为每个wav文件对应的标签文件
 ```
 同时会生成manifest ，即数据和标签对应关系
 
-<<<<<<< HEAD
 #### Librispeech  英文数据集略
-=======
-#### Librispeech  英文数据集略  
->>>>>>> 32c3addddaa4008f84849cb3da4e8acbccb2010f
 To automatically download the data
 ```console
 ❱❱❱ python data/librispeech.py
@@ -160,7 +149,7 @@ Use ``python multi_train.py --help`` for more parameters and options.
 #### 标签文件
 You need to specify all characters in the corpus by using the following JSON format:
 ```
-[ 
+[
   "_",
   "'",
   "A",
