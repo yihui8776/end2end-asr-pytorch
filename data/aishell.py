@@ -12,17 +12,19 @@ import unicodedata
 
 root = "Aishell_dataset/"
 
+
 def traverse(root, path, search_fix=".txt"):
     f_list = []
 
     p = root + path
     for s_p in sorted(os.listdir(p)):
         for sub_p in sorted(os.listdir(p + "/" + s_p)):
-            if sub_p[len(sub_p)-len(search_fix):] == search_fix:
+            if sub_p[len(sub_p) - len(search_fix):] == search_fix:
                 print(">", path, s_p, sub_p)
                 f_list.append(p + "/" + s_p + "/" + sub_p)
 
     return f_list
+
 
 def remove_punctuation(seq):
     # REMOVE CHINESE PUNCTUATION EXCEPT HYPEN / DASH AND FULL STOP
@@ -82,22 +84,26 @@ def remove_punctuation(seq):
     seq = remove_space_in_between_words(seq)
     return seq
 
-def remove_special_char(seq):
+
+def remove_special_char(seq):  # 去掉特殊字符
     seq = re.sub("[【】·．％°℃×→①ぃγ￣σς＝～•＋δ≤∶／⊥＿ñãíå∈△β［］±]+", " ", seq)
     return seq
 
-def remove_space_in_between_words(seq):
+
+def remove_space_in_between_words(seq):  # 去掉空格
     return seq.replace("  ", " ").replace("  ", " ").replace("  ", " ").replace("  ", " ").strip().lstrip()
+
 
 def remove_return(seq):
     return seq.replace("\n", "").replace("\r", "").replace("\t", "")
 
+
 def preprocess(seq):
     seq = seq.lower()
-    seq = re.sub("[\(\[].*?[\)\]]", "", seq) # REMOVE ALL WORDS WITH BRACKETS (HESITATION)
-    seq = re.sub("[\{\[].*?[\}\]]", "", seq) # REMOVE ALL WORDS WITH BRACKETS (HESITATION)
-    seq = re.sub("[\<\[].*?[\>\]]", "", seq) # REMOVE ALL WORDS WITH BRACKETS (HESITATION)
-    seq = re.sub("[\【\[].*?[\】\]]", "", seq) # REMOVE ALL WORDS WITH BRACKETS (HESITATION)
+    seq = re.sub("[\(\[].*?[\)\]]", "", seq)  # REMOVE ALL WORDS WITH BRACKETS (HESITATION)
+    seq = re.sub("[\{\[].*?[\}\]]", "", seq)  # REMOVE ALL WORDS WITH BRACKETS (HESITATION)
+    seq = re.sub("[\<\[].*?[\>\]]", "", seq)  # REMOVE ALL WORDS WITH BRACKETS (HESITATION)
+    seq = re.sub("[\【\[].*?[\】\]]", "", seq)  # REMOVE ALL WORDS WITH BRACKETS (HESITATION)
     seq = seq.replace("\x7f", "")
     seq = seq.replace("\x80", "")
     seq = seq.replace("\u3000", " ")
@@ -113,8 +119,8 @@ def preprocess(seq):
     seq = seq.replace("~", "")
     seq = seq.replace("—", "")
     seq = seq.replace("  ", " ").replace("  ", " ")
-    seq = re.sub('\<.*?\>','', seq) # REMOVE < >
-    seq = re.sub('\【.*?\】','', seq) # REMOVE 【 】
+    seq = re.sub('\<.*?\>', '', seq)  # REMOVE < >
+    seq = re.sub('\【.*?\】', '', seq)  # REMOVE 【 】
     seq = remove_special_char(seq)
     seq = remove_space_in_between_words(seq)
     seq = seq.strip()
@@ -124,8 +130,10 @@ def preprocess(seq):
 
     return seq
 
+
 def is_chinese_char(cc):
     return unicodedata.category(cc) == 'Lo'
+
 
 def is_contain_chinese_word(seq):
     for i in range(len(seq)):
@@ -133,9 +141,12 @@ def is_contain_chinese_word(seq):
             return True
     return False
 
+
 CHINESE_TAG = "†"
 ENGLISH_TAG = "‡"
 
+
+# 增加语言标志，区分中英文
 def add_lang(seq):
     new_seq = ""
     words = seq.split(" ")
@@ -156,7 +167,8 @@ def add_lang(seq):
         new_seq += words[i]
     return new_seq
 
-def separate_chinese_chars(seq):
+
+def separate_chinese_chars(seq):  # 相当于分词
     new_seq = ""
     words = seq.split(" ")
     for i in range(len(words)):
@@ -170,6 +182,7 @@ def separate_chinese_chars(seq):
                 new_seq += " "
             new_seq += words[i]
     return new_seq
+
 
 print("PREPROCESSING")
 if not os.path.isdir("Aishell_dataset/transcript_clean"):
@@ -185,16 +198,16 @@ if not os.path.isdir("Aishell_dataset/transcript_clean_lang"):
     os.system("mkdir Aishell_dataset/transcript_clean_lang/test")
 
 # PREPROCESS (additional remove all punctuation except '), and all hesitations
-tr_file_list = traverse(root, "transcript/train", search_fix="")
-dev_file_list = traverse(root, "transcript/dev", search_fix="")
-test_file_list = traverse(root, "transcript/test", search_fix="")
+tr_file_list = traverse(root, "transcript/train", search_fix=".docx")  # 所有数据位置
+dev_file_list = traverse(root, "transcript/dev", search_fix=".docx")
+test_file_list = traverse(root, "transcript/test", search_fix=".docx")
 
 for i in range(len(tr_file_list)):
     text_file_path = tr_file_list[i]
-    new_text_file_path = tr_file_list[i].replace("transcript", "transcript_clean").replace(".wav","") 
-    new_text_file_lang_path = tr_file_list[i].replace("transcript", "transcript_clean_lang").replace(".wav","") 
+    new_text_file_path = tr_file_list[i].replace("transcript", "transcript_clean").replace(".docx", ".txt")
+    new_text_file_lang_path = tr_file_list[i].replace("transcript", "transcript_clean_lang").replace(".docx", ".txt")
     print(new_text_file_path)
-    
+
     with open(text_file_path, "r", encoding="utf-8") as text_file:
         for line in text_file:
             print(line)
@@ -215,13 +228,13 @@ for i in range(len(tr_file_list)):
                 with open(new_text_file_lang_path, "w+", encoding="utf-8") as new_text_lang_file:
                     new_text_lang_file.write(lang_line + "\n")
             break
-            
+
 for i in range(len(dev_file_list)):
     text_file_path = dev_file_list[i]
-    new_text_file_path = dev_file_list[i].replace("transcript", "transcript_clean").replace(".wav",".txt") 
-    new_text_file_lang_path = dev_file_list[i].replace("transcript", "transcript_clean_lang").replace(".wav","") 
+    new_text_file_path = dev_file_list[i].replace("transcript", "transcript_clean").replace(".docx", ".txt")
+    new_text_file_lang_path = dev_file_list[i].replace("transcript", "transcript_clean_lang").replace(".docx", ".txt")
     print(new_text_file_path)
-    
+
     with open(text_file_path, "r", encoding="utf-8") as text_file:
         for line in text_file:
             print(line)
@@ -242,13 +255,13 @@ for i in range(len(dev_file_list)):
                 with open(new_text_file_lang_path, "w+", encoding="utf-8") as new_text_lang_file:
                     new_text_lang_file.write(lang_line + "\n")
             break
-            
+
 for i in range(len(test_file_list)):
     text_file_path = test_file_list[i]
-    new_text_file_path = test_file_list[i].replace("transcript", "transcript_clean").replace(".wav",".txt") 
-    new_text_file_lang_path = test_file_list[i].replace("transcript", "transcript_clean_lang").replace(".wav","") 
+    new_text_file_path = test_file_list[i].replace("transcript", "transcript_clean").replace(".docx", ".txt")
+    new_text_file_lang_path = test_file_list[i].replace("transcript", "transcript_clean_lang").replace(".docx", ".txt")
     print(new_text_file_path)
-    
+
     with open(text_file_path, "r", encoding="utf-8") as text_file:
         for line in text_file:
             print(line)
@@ -270,9 +283,9 @@ for i in range(len(test_file_list)):
                     new_text_lang_file.write(lang_line + "\n")
             break
 
-tr_file_list = traverse(root, "wav/train", search_fix="")
-dev_file_list = traverse(root, "wav/dev", search_fix="")
-test_file_list = traverse(root, "wav/test", search_fix="")
+tr_file_list = traverse(root, "transcript/train", search_fix=".wav")
+dev_file_list = traverse(root, "transcript/dev", search_fix=".wav")
+test_file_list = traverse(root, "transcript/test", search_fix=".wav")
 
 print("MANIFEST")
 print(">>", len(tr_file_list))
@@ -282,7 +295,8 @@ print(">>", len(test_file_list))
 labels = {}
 labels["_"] = True
 
-alpha = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+alpha = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
+         "w", "x", "y", "z"]
 labels = {}
 labels["_"] = True
 for char in alpha:
@@ -291,7 +305,7 @@ for char in alpha:
 with open("manifests/aishell_train_manifest.csv", "w+") as train_manifest:
     for i in range(len(tr_file_list)):
         wav_filename = tr_file_list[i]
-        text_filename = tr_file_list[i].replace(".wav", ".txt").replace("wav", "transcript_clean")
+        text_filename = tr_file_list[i].replace(".wav", ".txt").replace("transcript", "transcript_clean")
 
         if os.path.isfile(text_filename):
             print(text_filename)
@@ -301,12 +315,12 @@ with open("manifests/aishell_train_manifest.csv", "w+") as train_manifest:
                         if char != "\n" and char != "\r" and char != "\t":
                             labels[char] = True
 
-            train_manifest.write("data/" + wav_filename + "," + "data/" + text_filename + "\n")
+            train_manifest.write(wav_filename + "," + text_filename + "\n")
 
 with open("manifests/aishell_dev_manifest.csv", "w+") as valid_manifest:
     for i in range(len(dev_file_list)):
         wav_filename = dev_file_list[i]
-        text_filename = dev_file_list[i].replace(".wav", ".txt").replace("wav", "transcript_clean")
+        text_filename = dev_file_list[i].replace(".wav", ".txt").replace("transcript", "transcript_clean")
 
         if os.path.isfile(text_filename):
             print(text_filename)
@@ -316,12 +330,12 @@ with open("manifests/aishell_dev_manifest.csv", "w+") as valid_manifest:
                         if char != "\n" and char != "\r" and char != "\t":
                             labels[char] = True
 
-            valid_manifest.write("data/" + wav_filename + "," + "data/" + text_filename + "\n")
+            valid_manifest.write(wav_filename + "," + text_filename + "\n")
 
 with open("manifests/aishell_test_manifest.csv", "w+") as test_manifest:
     for i in range(len(test_file_list)):
         wav_filename = test_file_list[i]
-        text_filename = test_file_list[i].replace(".wav", ".txt").replace("wav", "transcript_clean")
+        text_filename = test_file_list[i].replace(".wav", ".txt").replace("transcript", "transcript_clean")
 
         if os.path.isfile(text_filename):
             print(text_filename)
@@ -331,9 +345,9 @@ with open("manifests/aishell_test_manifest.csv", "w+") as test_manifest:
                         if char != "\n" and char != "\r" and char != "\t":
                             labels[char] = True
 
-            test_manifest.write("data/" + wav_filename + "," + "data/" + text_filename + "\n")
+            test_manifest.write(wav_filename + "," + text_filename + "\n")
 
-with open("labels/aishell_labels.json", "w+") as labels_json:
+with open("data/labels/aishell_labels.json", "w+") as labels_json:
     labels_json.write("[")
     i = 0
     labels_json.write('\n"_"')
@@ -341,7 +355,7 @@ with open("labels/aishell_labels.json", "w+") as labels_json:
         if char == "" or char == "_" or char == " ":
             continue
         labels_json.write(',\n')
-        
+
         if char == "\\":
             print("slash")
             labels_json.write('"')
@@ -364,7 +378,7 @@ print(len(labels))
 with open("manifests/aishell_train_lang_manifest.csv", "w+") as train_manifest:
     for i in range(len(tr_file_list)):
         wav_filename = tr_file_list[i]
-        text_filename = tr_file_list[i].replace(".wav", ".txt").replace("wav", "transcript_clean_lang")
+        text_filename = tr_file_list[i].replace(".wav", ".txt").replace("transcript", "transcript_clean_lang")
 
         if os.path.isfile(text_filename):
             print(text_filename)
@@ -374,12 +388,12 @@ with open("manifests/aishell_train_lang_manifest.csv", "w+") as train_manifest:
                         if char != "\n" and char != "\r" and char != "\t":
                             labels[char] = True
 
-            train_manifest.write("data/" + wav_filename + "," + "data/" + text_filename + "\n")
+            train_manifest.write(wav_filename + "," + text_filename + "\n")
 
 with open("manifests/aishell_dev_lang_manifest.csv", "w+") as valid_manifest:
     for i in range(len(dev_file_list)):
         wav_filename = dev_file_list[i]
-        text_filename = dev_file_list[i].replace(".wav", ".txt").replace("wav", "transcript_clean_lang")
+        text_filename = dev_file_list[i].replace(".wav", ".txt").replace("transcript", "transcript_clean_lang")
 
         if os.path.isfile(text_filename):
             print(text_filename)
@@ -389,12 +403,12 @@ with open("manifests/aishell_dev_lang_manifest.csv", "w+") as valid_manifest:
                         if char != "\n" and char != "\r" and char != "\t":
                             labels[char] = True
 
-            valid_manifest.write("data/" + wav_filename + "," + "data/" + text_filename + "\n")
+            valid_manifest.write(wav_filename + "," + text_filename + "\n")
 
 with open("manifests/aishell_test_lang_manifest.csv", "w+") as test_manifest:
     for i in range(len(test_file_list)):
         wav_filename = test_file_list[i]
-        text_filename = test_file_list[i].replace(".wav", ".txt").replace("wav", "transcript_clean_lang")
+        text_filename = test_file_list[i].replace(".wav", ".txt").replace("transcript", "transcript_clean_lang")
 
         if os.path.isfile(text_filename):
             print(text_filename)
@@ -404,9 +418,9 @@ with open("manifests/aishell_test_lang_manifest.csv", "w+") as test_manifest:
                         if char != "\n" and char != "\r" and char != "\t":
                             labels[char] = True
 
-            test_manifest.write("data/" + wav_filename + "," + "data/" + text_filename + "\n")
+            test_manifest.write(wav_filename + "," + text_filename + "\n")
 
-with open("labels/aishell_lang_labels.json", "w+") as labels_json:
+with open("data/labels/aishell_lang_labels.json", "w+") as labels_json:
     labels_json.write("[")
     i = 0
     labels_json.write('\n"_"')
@@ -416,7 +430,7 @@ with open("labels/aishell_lang_labels.json", "w+") as labels_json:
         if char == "" or char == "_" or char == " ":
             continue
         labels_json.write(',\n')
-        
+
         if char == "\\":
             print("slash")
             labels_json.write('"')
