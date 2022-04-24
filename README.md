@@ -23,6 +23,7 @@ If you use any source codes included in this toolkit in your work, please cite t
 ### 结果
 AiShell-1
 这是中文数据集，用字错率（Character Error Rate, CER）来衡量中文ASR效果好坏
+
 | Decoding strategy | CER |
 | ------------- | ------------- |
 | Greedy | 14.5% |
@@ -31,14 +32,22 @@ AiShell-1
 ### 数据处理
 #### AiShell-1 (Chinese)
 先从 https://www.openslr.org/33/.下载数据
+
 有两个数据文件夹  resource_aishell  包含播音人信息，和主要拼音标注
+
                   data_aishell 包含主要数据集和文本标注
 
+
 需要先将wav 文件夹的声波数据进行划分为 train  dev 和test 文件夹
+
 这里更改了位置位于 Aishell_dataset 的 transcript 文件夹下
+
 通过split.py  将标签放在各个文件的目录下
+
 结构如下 ：
+
 Aishell_dataset/
+
 ├── transcript
 │   ├── train
 │   │   ├── S0724
@@ -65,7 +74,7 @@ docx为每个wav文件对应的标签文件
 ```
 同时会生成manifest ，即数据和标签对应关系
 
-#### Librispeech  英文数据集略
+#### Librispeech  英文数据集略  
 To automatically download the data
 ```console
 ❱❱❱ python data/librispeech.py
