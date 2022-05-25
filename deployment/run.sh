@@ -1,0 +1,1 @@
+docker run --gpus  '"device=4"' -it --rm -p 20001:20001 --name asrt --shm-size 10G -v /media/nizhengqi/sdf/wyh/end2end-asr-pytorch:/workspace yihui8776/asrserver:v1  python asrserver.py
