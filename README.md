@@ -31,7 +31,7 @@ AiShell-1
 
 ### 数据处理
 #### AiShell-1 (Chinese)
-先从 https://www.openslr.org/33/.下载数据
+先从 https://www.openslr.org/33/.   下载数据
 
 有两个数据文件夹  resource_aishell  包含播音人信息，和主要拼音标注
 
