@@ -38,6 +38,7 @@
 录制完成可以点击播放
 点击选择识别，  打开本地wav文件，并传递到服务端返回识别结果并展示
 
+![image](https://github.com/yihui8776/end2end-asr-pytorch/blob/master/deployment/demo.jpg)
 
 
 
